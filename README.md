@@ -14,10 +14,10 @@ Built on Databricks (data engineering) + Google Colab (modelling). Trained 2017�
 | Annualised Return | **15.57%** | 39.37% | ~-5% |
 | Annualised Volatility | **5.63%** | 30.64% | ~18% |
 | Max Drawdown | **-12.05%** | -25.50% | ~-25% |
-| Sortino / Calmar / Fitness | **3.52 / 2.25 / 2.27** | — | — |
-| t-stat / p-value | **2.64 / 0.009** | — | — |
+| Sortino / Calmar / Fitness | **3.52 / 2.25 / 2.27** | - | - |
+| t-stat / p-value | **2.64 / 0.009** | - | - |
 
-> Equal-weighted long-only portfolio of all 7 traded assets (XLE, XOM, CVX, SLB, VLO, FRO, STNG) — the correct benchmark for a cross-sectional strategy.
+> Equal-weighted long-only portfolio of all 7 traded assets (XLE, XOM, CVX, SLB, VLO, FRO, STNG) the correct benchmark for a cross-sectional strategy.
 >
 > Oil Intel is dollar-neutral (long top-2, short bottom-2). At 5× leverage to match benchmark volatility it would return ~+165% vs benchmark +89%. Sharpe is scale-invariant.
 
@@ -28,12 +28,12 @@ Validated across **2,000-path block bootstrap** (P(Sharpe ≥ 1.25) = 82.4%) and
 
 ## What It Does
 
-Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro rates to predict **which oil equities will outperform each other** over the next 5 trading days — not whether oil goes up or down.
+Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro rates to predict **which oil equities will outperform each other** over the next 5 trading days not whether oil goes up or down.
 
 - **Long** the top-2 ranked assets each week
 - **Short** the bottom-2 ranked assets each week
 - **Flat** on the remaining 3
-- **Dollar-neutral** at all times — profit comes from relative performance, not market direction
+- **Dollar-neutral** at all times profit comes from relative performance, not market direction
 
 **Why this works:** AIS vessel flow signals encode physical supply-chain dynamics (Middle East loading activity, dark fleet expansion, floating storage) with a 5–15 day lag before equity markets price them in. In 2022–2023, the model identified tanker outperformance (FRO +149%, STNG +275%) from Russia-Ukraine rerouting signals in AIS dark fleet and loitering data before these patterns were reflected in equity valuations.
 
@@ -56,8 +56,8 @@ Built on Databricks (data engineering) + Google Colab (modelling). Trained 2017�
 | Annualised Return | **15.57%** | 39.37% | ~-5% |
 | Annualised Volatility | **5.63%** | 30.64% | ~18% |
 | Max Drawdown | **-12.05%** | -25.50% | ~-25% |
-| Sortino / Calmar / Fitness | **3.52 / 2.25 / 2.27** | — | — |
-| t-stat / p-value | **2.64 / 0.009** | — | — |
+| Sortino / Calmar / Fitness | **3.52 / 2.25 / 2.27** | - | - |
+| t-stat / p-value | **2.64 / 0.009** | - | - |
 
 > ¹ Equal-weighted long-only portfolio of all 7 traded assets (XLE, XOM, CVX, SLB, VLO, FRO, STNG) the correct benchmark for a cross-sectional strategy.
 >
