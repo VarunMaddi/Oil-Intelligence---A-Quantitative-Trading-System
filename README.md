@@ -81,32 +81,8 @@ Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro
 ---
 
 ## Architecture
-Oil-Intelligence/
-├── data_pipeline/                        # Databricks notebooks (PySpark)
-│   ├── bronze/
-│   │   ├── 01_bronze_gfw_port_visits.py  # GFW port visits — 15.6M rows
-│   │   ├── 01_bronze_pv_parallel.py      # Parallel year-job ingestion (7 jobs)
-│   │   ├── 02_bronze_gfw_loitering.py    # GFW loitering events — 237K rows
-│   │   ├── 03_bronze_gfw_ais_gaps.py     # AIS gap events (dark fleet) — 37K rows
-│   │   └── 04_bronze_market_eia_fred_opec.py  # Market, EIA, FRED, OPEC
-│   ├── silver/
-│   │   ├── 05_date_spine.py              # Trading-day calendar 2017–2023
-│   │   ├── 06_port_visits_flat.py        # Confidence-4 filter + region labels
-│   │   ├── 07_ais_vessel_daily.py        # Daily vessel counts per region
-│   │   ├── 08_ais_loitering_daily.py     # Daily loitering counts per region
-│   │   ├── 09_ais_gaps_daily.py          # Daily dark fleet index per region
-│   │   ├── 10_market_daily.py            # Brent + DXY price features
-│   │   └── 11_eia_macro_opec_daily.py    # EIA (leakage guard) + FRED + OPEC flags
-│   └── gold/
-│       ├── 12_feature_store.py           # v1 — Brent direction features
-│       └── 14_feature_store_v2.py        # v2 — Equity targets, RSI fix, vol regime
-├── modeling/
-│   └── quant_pipeline.ipynb              # Full model, backtest, bootstrap, MC
-├── data/
-│   └── opec_events.csv                   # 37 manually curated OPEC events 2017–2023
-├── results/
-│   └── oil_intel_results.png             # Equity curve vs universe
-└── README.md
+<img width="552.5" height="475" alt="image" src="https://github.com/user-attachments/assets/6fcb7b64-9012-4bea-8a3f-935d46017c9d" />
+
 
 ---
 
