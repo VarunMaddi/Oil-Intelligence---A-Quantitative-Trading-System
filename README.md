@@ -1,4 +1,4 @@
-# Oil Intelligence — Quantitative Trading System
+# Oil Intelligence - Quantitative Trading System
 
 **Cross-sectional long/short equity strategy using physical oil supply-chain data to rank 7 oil-linked equities weekly.**
 
@@ -17,7 +17,7 @@ Built on Databricks (data engineering) + Google Colab (modelling). Trained 2017�
 | Sortino / Calmar / Fitness | **3.52 / 2.25 / 2.27** | — | — |
 | t-stat / p-value | **2.64 / 0.009** | — | — |
 
-> ¹ Equal-weighted long-only portfolio of all 7 traded assets (XLE, XOM, CVX, SLB, VLO, FRO, STNG) — the correct benchmark for a cross-sectional strategy.
+> Equal-weighted long-only portfolio of all 7 traded assets (XLE, XOM, CVX, SLB, VLO, FRO, STNG) — the correct benchmark for a cross-sectional strategy.
 >
 > Oil Intel is dollar-neutral (long top-2, short bottom-2). At 5× leverage to match benchmark volatility it would return ~+165% vs benchmark +89%. Sharpe is scale-invariant.
 
@@ -40,7 +40,7 @@ Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro
 ---
 
 ## Architecture
-# Oil Intelligence — Quantitative Trading System
+# Oil Intelligence - Quantitative Trading System
 
 **Cross-sectional long/short equity strategy using physical oil supply-chain data to rank 7 oil-linked equities weekly.**
 
@@ -88,7 +88,7 @@ Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro
 
 ## How to Run
 
-### Data Pipeline — Databricks Community Edition
+### Data Pipeline - Databricks Community Edition
 
 ```bash
 # Set environment variables (never hardcode keys)
@@ -110,7 +110,7 @@ Run notebooks in order:
 
 Output: `gold_features_v2.csv` (1,761 rows × 92 columns)
 
-### Model — Google Colab
+### Model - Google Colab
 
 1. Upload `gold_features_v2.csv`
 2. Open `modeling/quant_pipeline.ipynb`
@@ -135,7 +135,7 @@ Output: `gold_features_v2.csv` (1,761 rows × 92 columns)
 **Bronze → Silver → Gold** Delta Lake medallion on Databricks Unity Catalog  
 `/Volumes/workspace/oil_intel/project_data/`
 
-**Gold feature store:** 67 features — AIS vessel flows (21 cols), EIA petroleum
+**Gold feature store:** 67 features - AIS vessel flows (21 cols), EIA petroleum
 (7 series), Brent technicals, FRED rates, OPEC proximity flags, equity returns
 and betas, crack spread, rig count.
 
