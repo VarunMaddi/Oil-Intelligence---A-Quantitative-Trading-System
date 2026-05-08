@@ -81,4 +81,100 @@ Uses AIS vessel tracking data, EIA petroleum inventories, OPEC events, and macro
 ---
 
 ## Architecture
+Oil-Intelligence/
+├── data_pipeline/                        # Databricks notebooks (PySpark)
+│   ├── bronze/
+│   │   ├── 01_bronze_gfw_port_visits.py  # GFW port visits — 15.6M rows
+│   │   ├── 01_bronze_pv_parallel.py      # Parallel year-job ingestion (7 jobs)
+│   │   ├── 02_bronze_gfw_loitering.py    # GFW loitering events — 237K rows
+│   │   ├── 03_bronze_gfw_ais_gaps.py     # AIS gap events (dark fleet) — 37K rows
+│   │   └── 04_bronze_market_eia_fred_opec.py  # Market, EIA, FRED, OPEC
+│   ├── silver/
+│   │   ├── 05_date_spine.py              # Trading-day calendar 2017–2023
+│   │   ├── 06_port_visits_flat.py        # Confidence-4 filter + region labels
+│   │   ├── 07_ais_vessel_daily.py        # Daily vessel counts per region
+│   │   ├── 08_ais_loitering_daily.py     # Daily loitering counts per region
+│   │   ├── 09_ais_gaps_daily.py          # Daily dark fleet index per region
+│   │   ├── 10_market_daily.py            # Brent + DXY price features
+│   │   └── 11_eia_macro_opec_daily.py    # EIA (leakage guard) + FRED + OPEC flags
+│   └── gold/
+│       ├── 12_feature_store.py           # v1 — Brent direction features
+│       └── 14_feature_store_v2.py        # v2 — Equity targets, RSI fix, vol regime
+├── modeling/
+│   └── quant_pipeline.ipynb              # Full model, backtest, bootstrap, MC
+├── data/
+│   └── opec_events.csv                   # 37 manually curated OPEC events 2017–2023
+├── results/
+│   └── oil_intel_results.png             # Equity curve vs universe
+└── README.md
+
+---
+
+## How to Run
+
+### Data Pipeline — Databricks Community Edition
+
+```bash
+# Set environment variables (never hardcode keys)
+export GFW_TOKEN="your-gfw-token"
+export EIA_KEY="your-eia-key"
+export FRED_KEY="your-fred-key"
+```
+
+Run notebooks in order:
+
+| Step | Notebook | Runtime |
+|---|---|---|
+| 1 | `bronze/01_bronze_pv_parallel.py` | ~100 hrs (7 parallel jobs) |
+| 2 | `bronze/02_bronze_gfw_loitering.py` | ~2 hrs |
+| 3 | `bronze/03_bronze_gfw_ais_gaps.py` | ~1 hr |
+| 4 | `bronze/04_bronze_market_eia_fred_opec.py` | ~10 min |
+| 5 | `silver/05_date_spine.py` → `11_eia_macro_opec_daily.py` | ~35 min total |
+| 6 | `gold/14_feature_store_v2.py` | ~8 min |
+
+Output: `gold_features_v2.csv` (1,761 rows × 92 columns)
+
+### Model — Google Colab
+
+1. Upload `gold_features_v2.csv`
+2. Open `modeling/quant_pipeline.ipynb`
+3. Runtime → Run all
+
+---
+
+## Data Sources
+
+| Source | What | Volume |
+|---|---|---|
+| [GFW API v3](https://globalfishingwatch.org/our-apis/) | Port visits, loitering, AIS gaps | **15.6M rows** |
+| [EIA API v2](https://www.eia.gov/opendata/) | Crude stocks, refinery utilisation, imports/exports | 7 weekly series |
+| [FRED](https://fred.stlouisfed.org/) | TB3MS 3-month T-bill (risk-free rate) | Monthly |
+| [Yahoo Finance](https://finance.yahoo.com/) | Brent, DXY, XLE/XOM/CVX/SLB/VLO/FRO/STNG/SPY | Daily OHLCV |
+| OPEC press releases | Meeting dates + outcomes (hand-curated) | 37 events |
+
+---
+
+## Architecture
+
+**Bronze → Silver → Gold** Delta Lake medallion on Databricks Unity Catalog  
+`/Volumes/workspace/oil_intel/project_data/`
+
+**Gold feature store:** 67 features — AIS vessel flows (21 cols), EIA petroleum
+(7 series), Brent technicals, FRED rates, OPEC proximity flags, equity returns
+and betas, crack spread, rig count.
+
+**Model:** 5-model ensemble on 8,736-row panel (1,248 dates × 7 assets)
+→ LGBMRanker (LambdaRank) + LightGBM + XGBoost + ExtraTrees + ElasticNet  
+→ 25-fold purged walk-forward (5-day purge + 5-day embargo, Lopez de Prado)  
+→ Dollar-neutral construction, 15% vol targeting, 2-tier DD brakes
+
+---
+
+## Tech Stack
+
+`Databricks` `PySpark` `Delta Lake` `Unity Catalog` `LightGBM` `XGBoost`
+`scikit-learn` `Python` `SQL` `GFW REST API v3` `EIA API v2` `FRED API`
+
+---
+
 
